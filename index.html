@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BA 465 — Portfolio Decision Lab</title>
+<style>
+:root{--forest:#214833;--copper:#a55d37;--cream:#faf8f1;--ink:#202e28;--muted:#52645a}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);font:17px/1.5 system-ui,Arial,sans-serif;color:var(--ink)}
+header{background:var(--forest);padding:26px max(20px,calc((100vw - 1050px)/2));color:white}
+.eyebrow{color:#f3c7a6;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+h1{font:700 clamp(27px,3.5vw,40px)/1.2 Georgia,serif;margin:8px 0}header p{max-width:810px}
+main{max-width:1050px;margin:auto;padding:22px 16px 48px}
+section{background:#fff;border:1px solid #d0dacf;border-radius:12px;padding:23px;margin:0 0 18px;box-shadow:0 2px 10px #2148330a}
+h2{font:700 25px Georgia,serif;color:var(--forest);margin:0 0 12px}h3{color:var(--forest);margin-bottom:6px}
+label{font-weight:700;color:var(--forest)}select,input{padding:9px;font:inherit;border:1px solid #91a695;border-radius:6px;background:#fff;max-width:100%}
+select{display:block;width:min(100%,540px);margin:8px 0}input[type=number]{width:104px}
+.asset{display:grid;grid-template-columns:minmax(170px,1fr) 110px;gap:12px;padding:9px 0;align-items:center;border-bottom:1px solid #e2e9e2}
+.note{background:#ebf0e9;border-left:4px solid var(--copper);padding:12px 15px;border-radius:5px;margin:13px 0}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:15px 0}
+.metric{background:#edf2ec;padding:13px;border-radius:8px}.metric strong{font-size:23px;color:var(--forest);display:block;font-variant-numeric:tabular-nums}
+.metric span,.small{font-size:14px;color:var(--muted)}
+button{background:var(--forest);border:1px solid var(--forest);border-radius:7px;color:white;font:700 15px system-ui;padding:10px 14px;margin:5px 6px 0 0;cursor:pointer}
+button.secondary{background:white;color:var(--forest)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--copper);outline-offset:2px}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-variant-numeric:tabular-nums}
+th,td{padding:8px;border-bottom:1px solid #dce5dc;text-align:left}th{background:#eff4ee;color:var(--forest)}td:not(:first-child),th:not(:first-child){text-align:right}
+.bar{height:13px;background:#e1e6e1;display:flex;overflow:hidden;border-radius:9px}.bar span{height:100%}
+.warning{font-weight:700;color:#9a3d20}.good{font-weight:700;color:#23683c}
+@media(max-width:620px){.metrics{grid-template-columns:1fr}section{padding:16px}body{font-size:16px}}
+@media print{header{background:white;color:black}header .eyebrow{color:black}section{break-inside:avoid;box-shadow:none}button{display:none}}
+</style></head>
+<body>
+<header><div class="eyebrow">BA 465 · Week 4 · Independent practice</div><h1>Portfolio Decision Lab</h1><p>Construct an illustrative portfolio, apply economic scenarios, and evaluate whether your allocation matches an investor's mandate. Use Part C of your Week 4 Investment Analysis Workbook to record and interpret your results.</p></header>
+<main>
+<section>
+<h2>1. Choose an investment mandate</h2>
+<p>Investment mandates explain whom a portfolio serves and establish objectives and constraints. These are hypothetical teaching policies, not APU's actual investment policy.</p>
+<label for="mandate">Investor's objective</label>
+<select id="mandate"><option value="growth">Long-term growth-equity endowment</option><option value="income">Income-oriented institutional fund</option><option value="reserve">Short-term operating reserve</option></select>
+<div id="mandateExplanation" class="note" aria-live="polite"></div>
+<button type="button" id="preset">Load example allocation</button>
+</section>
+<section>
+<h2>2. Allocate $100,000</h2>
+<p>Enter the five portfolio weights as percentages in increments of 5. The weights must add to 100%. Each equity category represents a hypothetical basket, not a particular company.</p>
+<div id="assetInputs"></div>
+<p id="status" aria-live="polite"></p><div class="bar" id="bar" role="img"></div>
+<div class="metrics" id="allocationSummary"></div>
+<p class="small">Equities respond differently to company growth and the economy. Bonds and cash also carry risks. This simplified exercise does not calculate historical volatility or statistical correlations.</p>
+</section>
+<section>
+<h2>3. Test market conditions</h2>
+<p>Choose one fictional one-year economic scenario. Returns are illustrative, not forecasts or actual historical observations.</p>
+<label for="scenario">Market scenario</label>
+<select id="scenario"><option value="rally">Broad equity rally</option><option value="recession">Recession</option><option value="inflation">Inflation and rising interest rates</option><option value="uneven">Uneven recovery</option></select>
+<div id="scenarioExplanation" class="note"></div>
+<p id="scenarioReturns" class="small"></p><div class="metrics" id="outcome" aria-live="polite"></div>
+<h3>What contributed to the return?</h3>
+<table><thead><tr><th>Asset category</th><th>Weight</th><th>Return</th><th>Contribution</th></tr></thead><tbody id="contributions"></tbody></table>
+<p class="small">Portfolio return = sum of (asset weight × asset return). Contributions are in percentage points. No trading costs, fees, taxes, deposits, or withdrawals are included.</p>
+</section>
+<section>
+<h2>4. Revise and compare</h2>
+<p>First, record your initial portfolio and recession results in Part C of your workbook. Change at least two allocations, keeping your weights at 100% and within the growth-endowment's illustrative limits. Retest the <strong>same recession</strong> scenario. Then load an income-oriented or reserve mandate and compare.</p>
+<p>Finally, test another market scenario. Did the change improve one outcome at the expense of another? Is a portfolio appropriate because of its highest observed return, or because it aligns with the mandate?</p>
+<div class="note"><strong>Interpretation:</strong> Performing better in one fictional scenario does not establish that a portfolio is the best choice. Evaluate tradeoffs and the investor's purpose.</div>
+<button type="button" class="secondary" id="reset">Reset</button><button type="button" class="secondary" id="print">Print or save current results</button>
+</section>
+<p class="small">BA 465 instructional simulation. All mandates and return assumptions are fictional. No real-time market data or personalized investment advice. No information is uploaded or stored by the lab.</p>
+</main>
+<script>
+"use strict";
+const assets=[
+{id:"growthEq",name:"Growth-oriented equities",color:"#285746"},
+{id:"defensiveEq",name:"Defensive equities",color:"#528778"},
+{id:"cyclicalEq",name:"Cyclical equities",color:"#a85c37"},
+{id:"bonds",name:"Investment-grade bonds",color:"#c69d59"},
+{id:"cash",name:"Cash equivalents",color:"#9ea9a6"}];
+const mandates={
+growth:{description:"Objective: long-term growth of portfolio value. Illustrative constraints: at least 70% total equities; no more than 50% in any single equity category.",weights:[40,20,20,15,5]},
+income:{description:"Objective: support recurring distributions while managing capital risk. Illustrative constraints: at least 30% bonds, 10% cash, and no more than 60% equities.",weights:[15,25,15,35,10]},
+reserve:{description:"Objective: maintain liquidity for obligations in the next two years. Illustrative constraints: at least 80% in bonds plus cash; no more than 20% equities.",weights:[0,10,5,35,50]}};
+const scenarios={
+rally:{description:"Expanding economic activity benefits most equities, especially growth-oriented and cyclical businesses.",returns:[20,8,15,3,3]},
+recession:{description:"A sharp slowdown reduces stock prices, while investment-grade bonds rise in this illustrative scenario.",returns:[-28,-12,-32,7,3]},
+inflation:{description:"Inflation and rising rates pressure equities and existing bonds; cash returns rise.",returns:[-16,-8,-11,-9,4]},
+uneven:{description:"Growth businesses rebound while cyclical businesses lag.",returns:[14,5,-6,2,3]}};
+const $=id=>document.getElementById(id);
+function money(n){return n.toLocaleString("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0})}
+function pct(n){return (n>0?"+":"")+n.toFixed(2)+"%"}
+function pp(n){return (n>0?"+":"")+n.toFixed(2)+" pp"}
+function weights(){return assets.map(a=>Number($("w-"+a.id).value))}
+function setWeights(numbers){assets.forEach((a,i)=>{$("w-"+a.id).value=numbers[i]});update()}
+function update(){
+const w=weights(),total=w.reduce((a,b)=>a+b,0),equity=w[0]+w[1]+w[2];
+const mandate=$("mandate").value,scenario=scenarios[$("scenario").value];
+$("mandateExplanation").textContent=mandates[mandate].description;
+$("scenarioExplanation").textContent=scenario.description;
+const invalid=w.some(v=>!Number.isFinite(v)||v<0||v>100||v%5!==0)||total!==100;
+let issues=[];
+if(mandate==="growth"){if(equity<70)issues.push("Equities are below 70%.");if(Math.max(...w.slice(0,3))>50)issues.push("An equity category exceeds 50%.")}
+if(mandate==="income"){if(w[3]<30)issues.push("Bonds are below 30%.");if(w[4]<10)issues.push("Cash is below 10%.");if(equity>60)issues.push("Equities exceed 60%.")}
+if(mandate==="reserve"){if(w[3]+w[4]<80)issues.push("Bonds plus cash are below 80%.");if(equity>20)issues.push("Equities exceed 20%.")}
+$("status").className=invalid||issues.length?"warning":"good";
+$("status").textContent=invalid?"Allocation total: "+total+"%. Enter weights adding to 100% in increments of 5.":issues.length?"Total: 100%. Policy warning: "+issues.join(" "):"Total: 100%. All illustrative policy limits satisfied.";
+$("bar").innerHTML="";
+assets.forEach((a,i)=>{const bar=document.createElement("span");bar.style.width=Math.max(0,Math.min(w[i],100))+"%";bar.style.background=a.color;$("bar").appendChild(bar)});
+$("bar").setAttribute("aria-label",assets.map((a,i)=>a.name+": "+w[i]+"%").join("; "));
+$("allocationSummary").innerHTML='<div class="metric"><span>Total equity</span><strong>'+equity+'%</strong></div><div class="metric"><span>Bonds + cash</span><strong>'+(w[3]+w[4])+'%</strong></div><div class="metric"><span>Largest category</span><strong>'+Math.max(...w)+'%</strong></div>';
+$("scenarioReturns").textContent="Illustrative asset returns: "+assets.map((a,i)=>a.name+": "+pct(scenario.returns[i])).join(" · ");
+if(invalid){$("outcome").textContent="Complete an allocation totaling 100% to calculate the result.";$("contributions").innerHTML="";return}
+const contrib=w.map((weight,i)=>weight*scenario.returns[i]/100);
+const ret=contrib.reduce((a,b)=>a+b,0);
+$("outcome").innerHTML='<div class="metric"><span>Portfolio return</span><strong>'+pct(ret)+'</strong></div><div class="metric"><span>Ending value</span><strong>'+money(100000*(1+ret/100))+'</strong></div><div class="metric"><span>Gain / loss</span><strong>'+money(1000*ret)+'</strong></div>';
+$("contributions").innerHTML=assets.map((a,i)=>'<tr><td>'+a.name+'</td><td>'+w[i]+'%</td><td>'+pct(scenario.returns[i])+'</td><td>'+pp(contrib[i])+'</td></tr>').join("")+'<tr><th>Total</th><th>100%</th><th>—</th><th>'+pp(ret)+'</th></tr>';
+}
+assets.forEach((a,i)=>{const row=document.createElement("div");row.className="asset";const label=document.createElement("label");label.htmlFor="w-"+a.id;label.textContent=a.name;const input=document.createElement("input");input.type="number";input.id="w-"+a.id;input.min=0;input.max=100;input.step=5;input.value=mandates.growth.weights[i];input.addEventListener("input",update);row.append(label,input);$("assetInputs").appendChild(row)});
+$("mandate").addEventListener("change",()=>setWeights(mandates[$("mandate").value].weights));
+$("scenario").addEventListener("change",update);
+$("preset").addEventListener("click",()=>setWeights(mandates[$("mandate").value].weights));
+$("reset").addEventListener("click",()=>{$("mandate").value="growth";$("scenario").value="rally";setWeights(mandates.growth.weights)});
+$("print").addEventListener("click",()=>window.print());
+update();
+</script></body></html>
